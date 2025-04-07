@@ -48,4 +48,14 @@ public class TopicService {
         topicRepository.save(topic);
     }
 
+    @Transactional
+    public void deleteTopic(Integer topicId)  {
+        // Cari topik berdasarkan id
+        Topic topic = topicRepository.findById(topicId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to update post availability"));
+
+        // Hapus topic tersebut
+        topicRepository.delete(topic);
+    }
+
 }

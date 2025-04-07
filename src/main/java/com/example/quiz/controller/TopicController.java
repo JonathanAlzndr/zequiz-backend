@@ -104,4 +104,27 @@ public class TopicController {
 
         return ResponseEntity.ok("Topic Updated Successfully");
     }
+
+    @DeleteMapping(
+            path = "zequiz/topic/{topicId}"
+    )
+    public ResponseEntity<?> deleteTopic(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable("topicId") Integer topicId
+    ) {
+        // Cek jika ada token
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT Token is missing");
+        }
+
+        // Cek jika token valid
+        String token = authHeader.substring(7);
+        if(!jwtUtils.validateJwtToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+        }
+
+        topicService.deleteTopic(topicId);
+
+        return ResponseEntity.ok("Topic Deleted Successfully");
+    }
 }
