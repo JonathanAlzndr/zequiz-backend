@@ -62,7 +62,7 @@
 - Mengubah nama topic
 - **Authorization:** Required (Bearer Token)
 
-### Request Parameters:
+### Path Variable:
 
 | Parameter | Type  | Required | Description                    |
 |-----------|-------|----------|--------------------------------|
@@ -93,7 +93,7 @@
 - Menghapus
 - **Authorization** : Required (Bearer Token)
 
-### Request Parameters:
+### Path Variable:
 
 | Parameter | Type  | Required | Description                    |
 |-----------|-------|----------|--------------------------------|

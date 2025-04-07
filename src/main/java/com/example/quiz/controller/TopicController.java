@@ -78,4 +78,30 @@ public class TopicController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping(
+            path = "zequiz/topic/{topicId}"
+    )
+    public ResponseEntity<?> updateTopic(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable("topicId") Integer topicId,
+            @RequestBody TopicRequest request
+    ) {
+        // Cek jika ada token
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT Token is missing");
+        }
+
+        // Cek jika token valid
+        String token = authHeader.substring(7);
+        if(!jwtUtils.validateJwtToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+        }
+
+        String topicNewName = request.getTopicName();
+
+        topicService.updateTopic(topicId, topicNewName);
+
+        return ResponseEntity.ok("Topic Updated Successfully");
+    }
 }
