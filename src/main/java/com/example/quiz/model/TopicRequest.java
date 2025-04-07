@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateTopicRequestBody {
+public class TopicRequest {
     private String topicName;
 }

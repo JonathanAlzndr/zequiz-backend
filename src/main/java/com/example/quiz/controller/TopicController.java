@@ -1,7 +1,8 @@
 package com.example.quiz.controller;
 
-import com.example.quiz.model.CreateQuestionRequestBody;
-import com.example.quiz.model.CreateTopicRequestBody;
+import com.example.quiz.entity.Topic;
+import com.example.quiz.model.TopicRequest;
+import com.example.quiz.model.GetTopicResponse;
 import com.example.quiz.repository.TopicRepository;
 import com.example.quiz.repository.UserRepository;
 import com.example.quiz.security.JwtUtil;
@@ -9,11 +10,9 @@ import com.example.quiz.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TopicController {
@@ -36,7 +35,7 @@ public class TopicController {
     )
     public ResponseEntity<?> createTopic(
             @RequestHeader("Authorization") String authHeader,
-            @RequestBody CreateTopicRequestBody request
+            @RequestBody TopicRequest request
     ) {
         // Cek jika ada token
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -53,5 +52,30 @@ public class TopicController {
         topicService.createTopic(request);
 
         return ResponseEntity.ok("Created Successfully");
+    }
+
+    @GetMapping(
+            path = "zequiz/topic"
+    )
+    public ResponseEntity<?> getAllTopics(
+            @RequestHeader("Authorization") String authHeader
+    )  {
+        // Cek jika ada token
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT Token is missing");
+        }
+
+        // Cek jika token valid
+        String token = authHeader.substring(7);
+        if(!jwtUtils.validateJwtToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+        }
+
+        List<Topic> listTopics = topicService.getAllTopics();
+        GetTopicResponse response = GetTopicResponse.builder()
+                .data(listTopics)
+                .message("Success")
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

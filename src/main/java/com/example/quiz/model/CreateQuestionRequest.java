@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateQuestionRequestBody {
+public class CreateQuestionRequest {
     private String pertanyaan;
     private String opsiPertama;
     private String opsiKedua;
